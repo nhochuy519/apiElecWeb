@@ -132,11 +132,18 @@ const tabContent = async (req, res, next) => {
         },
       },
     ]);
+    const limitedProducts = products.map((category) => ({
+      _id: category._id,
+      name: category.name.slice(0, 4),
+      price: category.price.slice(0, 4),
+      imgs: category.imgs.slice(0, 4),
+      stars: category.stars.slice(0, 4),
+    }));
     res.status(200).json({
       status: "success",
       length: products.length,
       data: {
-        products,
+        limitedProducts,
       },
     });
   } catch (error) {
