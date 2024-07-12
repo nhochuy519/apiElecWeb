@@ -134,13 +134,14 @@ const tabContent = async (req, res, next) => {
     ]);
     const limitedProducts = products.map((category) => ({
       _id: category._id,
-      products: {
-        length: category.name.length,
-        name: category.name.slice(0, 4),
-        price: category.price.slice(0, 4),
-        imgs: category.imgs.slice(0, 4),
-        stars: category.stars.slice(0, 4),
-      },
+      products: category.name.map((item, index) => {
+        return {
+          name: item,
+          price: category.price[index],
+          imgs: category.imgs[index],
+          stars: category.stars[index],
+        };
+      }),
     }));
     res.status(200).json({
       status: "success",
