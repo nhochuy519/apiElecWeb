@@ -123,7 +123,7 @@ const tabContent = async (req, res, next) => {
           price: {
             $push: "$price",
           },
-          imgs: {
+          images: {
             $push: "$images",
           },
           stars: {
@@ -138,7 +138,7 @@ const tabContent = async (req, res, next) => {
         return {
           name: item,
           price: category.price[index],
-          imgs: category.imgs[index],
+          images: category.images[index],
           stars: category.stars[index],
         };
       }),
