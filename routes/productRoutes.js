@@ -9,6 +9,7 @@ router
   .get(handleProduct.getProducts)
   .post(handleProduct.createProduct);
 
+router.route("/tabContent").get(handleProduct.tabContent);
 router.route("/mainPage").get(handleProduct.getHomePageProduct);
 
 module.exports = router;

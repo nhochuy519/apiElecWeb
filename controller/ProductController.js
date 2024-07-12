@@ -18,7 +18,7 @@ const getProducts = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: "fail",
-      error,
+      message: error,
     });
   }
 };
@@ -36,7 +36,7 @@ const createProduct = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: error.status,
-      error,
+      message: error,
     });
   }
 };
@@ -90,9 +90,61 @@ const getHomePageProduct = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: error.status,
-      error,
+      message: error,
     });
   }
 };
 
-module.exports = { getProducts, createProduct, getHomePageProduct };
+const tabContent = async (req, res, next) => {
+  try {
+    const products = await Product.aggregate([
+      {
+        $match: {
+          category: {
+            $in: [
+              "headphone",
+              "cctv",
+              "mouse",
+              "monitor",
+              "keyboard",
+              "speaker",
+              "phone",
+              "laptop",
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$category",
+          name: {
+            $push: "$name",
+          },
+          price: {
+            $push: "$price",
+          },
+          imgs: {
+            $push: "$images",
+          },
+          stars: {
+            $push: "$star",
+          },
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: "success",
+      length: products.length,
+      data: {
+        products,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
+module.exports = { getProducts, createProduct, getHomePageProduct, tabContent };
