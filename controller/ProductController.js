@@ -130,6 +130,9 @@ const tabContent = async (req, res, next) => {
       },
       {
         $addFields: {
+          products: {
+            $slice: ["$products", 4], // Giới hạn số lượng sản phẩm trong mỗi danh mục là 4
+          },
           sortIndex: { $indexOfArray: [tabList, "$_id"] },
         },
       },
