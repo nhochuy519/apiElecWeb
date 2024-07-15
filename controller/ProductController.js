@@ -140,6 +140,7 @@ const tabContent = async (req, res, next) => {
           _id: "$category",
           products: {
             $push: {
+              _id: "$_id",
               name: "$name",
               price: "$price",
               images: "$images",
