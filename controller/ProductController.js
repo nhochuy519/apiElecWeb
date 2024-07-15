@@ -23,6 +23,25 @@ const getProducts = async (req, res, next) => {
   }
 };
 
+const getProduct = async (req, res, next) => {
+  try {
+    console.log(req.params);
+    const product = await Product.findById(req.params.id);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        product,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error,
+    });
+  }
+};
+
 const createProduct = async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body);
@@ -158,4 +177,10 @@ const tabContent = async (req, res, next) => {
   }
 };
 
-module.exports = { getProducts, createProduct, getHomePageProduct, tabContent };
+module.exports = {
+  getProducts,
+  createProduct,
+  getHomePageProduct,
+  tabContent,
+  getProduct,
+};

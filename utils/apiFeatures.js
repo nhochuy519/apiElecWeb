@@ -7,13 +7,14 @@ class APIFeatures {
 
   filter() {
     let objQuery = { ...this.queryString };
-    const excludeFiels = ["name", "random"];
+    // console.log(objQuery);
+    const excludeFiels = ["name"];
     excludeFiels.forEach((item) => delete objQuery[item]);
-    if (this.queryString.q) {
-      objQuery = { name: { $regex: this.queryString.q, $options: "i" } };
+    if (this.queryString.name) {
+      objQuery = { name: { $regex: this.queryString.name, $options: "i" } };
     }
 
-    this.query = this.query.find();
+    this.query = this.query.find(objQuery);
 
     return this;
   }

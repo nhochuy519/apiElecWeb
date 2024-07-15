@@ -12,4 +12,6 @@ router
 router.route("/tabContent").get(handleProduct.tabContent);
 router.route("/mainPage").get(handleProduct.getHomePageProduct);
 
+router.route("/:id").get(handleProduct.getProduct);
+
 module.exports = router;
