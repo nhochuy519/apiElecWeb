@@ -97,63 +97,60 @@ const getHomePageProduct = async (req, res, next) => {
 
 const tabContent = async (req, res, next) => {
   try {
+    const tabList = [
+      "headphone",
+      "cctv",
+      "mouse",
+      "monitor",
+      "keyboard",
+      "speaker",
+      "phone",
+      "laptop",
+    ];
+
     const products = await Product.aggregate([
       {
         $match: {
           category: {
-            $in: [
-              "headphone",
-              "cctv",
-              "mouse",
-              "monitor",
-              "keyboard",
-              "speaker",
-              "phone",
-              "laptop",
-            ],
+            $in: tabList,
           },
         },
       },
       {
         $group: {
           _id: "$category",
-          name: {
-            $push: "$name",
-          },
-          price: {
-            $push: "$price",
-          },
-          images: {
-            $push: "$images",
-          },
-          stars: {
-            $push: "$star",
+          products: {
+            $push: {
+              name: "$name",
+              price: "$price",
+              images: "$images",
+            },
           },
         },
       },
+      {
+        $addFields: {
+          sortIndex: { $indexOfArray: [tabList, "$_id"] },
+        },
+      },
+      {
+        $sort: {
+          sortIndex: 1,
+        },
+      },
     ]);
-    const limitedProducts = products.map((category) => ({
-      _id: category._id,
-      products: category.name.map((item, index) => {
-        return {
-          name: item,
-          price: category.price[index],
-          images: category.images[index],
-          stars: category.stars[index],
-        };
-      }),
-    }));
+
     res.status(200).json({
       status: "success",
       length: products.length,
       data: {
-        limitedProducts,
+        limitedProducts: products,
       },
     });
   } catch (error) {
     res.status(400).json({
       status: "fail",
-      message: error,
+      message: error.message,
     });
   }
 };
