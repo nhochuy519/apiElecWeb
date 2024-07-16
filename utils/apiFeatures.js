@@ -18,6 +18,8 @@ class APIFeatures {
 
     return this;
   }
+
+  paginate() {}
   // async random() {
   //   if (this.queryString.limit) {
   //     // const count = await this.query.model.countDocuments();
