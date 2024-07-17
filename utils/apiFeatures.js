@@ -1,17 +1,16 @@
 class APIFeatures {
   constructor(query, queryString) {
-    // product.find(), req.query
     this.query = query;
     this.queryString = queryString;
   }
 
   filter() {
     let objQuery = { ...this.queryString };
-    // console.log(objQuery);
-    const excludeFiels = ["name", "page", "limit"];
-    excludeFiels.forEach((item) => delete objQuery[item]);
+    const excludeFields = ["page", "limit"];
+    excludeFields.forEach((item) => delete objQuery[item]);
+
     if (this.queryString.name) {
-      objQuery = { name: { $regex: this.queryString.name, $options: "i" } };
+      objQuery.name = { $regex: this.queryString.name, $options: "i" };
     }
 
     this.query = this.query.find(objQuery);
@@ -20,11 +19,11 @@ class APIFeatures {
   }
 
   paginate() {
-    const page = this.queryString.page * 1;
-    const limitPage = this.queryString.limit * 1;
-    const skipEl = limitPage * (page * 1);
+    const page = this.queryString.page * 1 || 1; // Default page is 1
+    const limit = this.queryString.limit * 1 || 10; // Default limit is 10
+    const skip = (page - 1) * limit;
 
-    this.query = this.query.skip(skipEl).limit(limitPage);
+    this.query = this.query.skip(skip).limit(limit);
 
     return this;
   }
