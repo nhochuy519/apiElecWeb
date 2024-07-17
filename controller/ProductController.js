@@ -6,7 +6,7 @@ const APIFeatures = require("../utils/apiFeatures");
 const getProducts = async (req, res, next) => {
   try {
     const features = new APIFeatures(Product.find(), req.query);
-    features.filter();
+    features.filter().paginate();
     const products = await features.query;
     res.status(200).json({
       status: "success",

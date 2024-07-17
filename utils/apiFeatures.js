@@ -8,7 +8,7 @@ class APIFeatures {
   filter() {
     let objQuery = { ...this.queryString };
     // console.log(objQuery);
-    const excludeFiels = ["name"];
+    const excludeFiels = ["name", "page", "limit"];
     excludeFiels.forEach((item) => delete objQuery[item]);
     if (this.queryString.name) {
       objQuery = { name: { $regex: this.queryString.name, $options: "i" } };
@@ -19,7 +19,15 @@ class APIFeatures {
     return this;
   }
 
-  paginate() {}
+  paginate() {
+    const page = this.queryString.page * 1;
+    const limitPage = this.queryString.limit * 1;
+    const skipEl = limitPage * (page * 1);
+
+    this.query = this.query.skip(skipEl).limit(limitPage);
+
+    return this;
+  }
   // async random() {
   //   if (this.queryString.limit) {
   //     // const count = await this.query.model.countDocuments();
