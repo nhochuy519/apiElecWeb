@@ -7,9 +7,11 @@ class APIFeatures {
   filter() {
     let objQuery = { ...this.queryString };
     const excludeFields = ["page", "limit"];
+    console.log(objQuery);
     excludeFields.forEach((item) => delete objQuery[item]);
 
     if (this.queryString.name) {
+      console.log("thực hiện truy vấn name");
       objQuery.name = { $regex: this.queryString.name, $options: "i" };
     }
 
@@ -19,8 +21,8 @@ class APIFeatures {
   }
 
   paginate() {
-    const page = this.queryString.page * 1 || 1; // Default page is 1
-    const limit = this.queryString.limit * 1 || 10; // Default limit is 10
+    const page = this.queryString.page * 1;
+    const limit = this.queryString.limit * 1;
     const skip = (page - 1) * limit;
 
     this.query = this.query.skip(skip).limit(limit);
