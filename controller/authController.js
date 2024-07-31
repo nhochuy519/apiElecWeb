@@ -22,7 +22,12 @@ const signup = catchError(async (req, res, next) => {
   const createCustomer = await Customer.create(req.body);
   const token = signToken(createCustomer._id);
 
-  res.cookie("token", token, { signed: true, httpOnly: true });
+  res.cookie("token", token, {
+    signed: true,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "development", // Đảm bảo thiết lập secure chỉ khi trong môi trường production
+    sameSite: "None", // Nếu bạn đang gửi cookie từ một miền khác, hãy đặt sameSite thành "None"
+  });
   resSuccess(res, 201, token);
 });
 
