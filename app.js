@@ -17,7 +17,12 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:5173", // Thay thế bằng URL của client
+  credentials: true, // Cho phép gửi cookie và các thông tin xác thực khác
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser("ronaldoIsTheGoat"));
 app.use(function (req, res, next) {
