@@ -59,6 +59,10 @@ const customerSchema = mongoose.Schema({
   numberPhone: {
     type: Number,
   },
+
+  passwordChangeAt: {
+    type: Date,
+  },
 });
 
 customerSchema.pre("save", async function (next) {
@@ -76,6 +80,18 @@ customerSchema.methods.correctPassword = async function (
   userPasword,
 ) {
   return await bcrypt.compare(candidatePassword, userPasword);
+};
+
+customerSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangeAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangeAt.getTime() / 1000,
+      10,
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  return false;
 };
 
 const Customer = mongoose.model("Customer", customerSchema);

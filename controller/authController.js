@@ -55,4 +55,34 @@ const login = catchError(async (req, res, next) => {
   resSuccess(res, 200, token);
 });
 
+const protect = catchError(async (req, res, next) => {
+  const token = req.signedCookies.token;
+  if (!token) {
+    return next(
+      new AppError("Your are not logged in! Please log in to get access", 401),
+    );
+  }
+
+  const decodedJwt = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+  const customer = await Customer.findById(decodedJwt.id);
+
+  if (!customer) {
+    return next(
+      new AppError("The user belonging to this token does no longer", 401),
+    );
+  }
+
+  if (customer.changedPasswordAfter(decodedJwt.iat)) {
+    return new AppError(
+      "User recently changed password! Please log in again",
+      401,
+    );
+  }
+
+  req.user = customer;
+  next();
+});
+
+const getProfile = catchError(async (req, res, next) => {});
 module.exports = { signup, login };
