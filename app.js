@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:5173",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
