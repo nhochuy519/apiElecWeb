@@ -21,7 +21,6 @@ const resSuccess = (res, statusCode, token) => {
 const signup = catchError(async (req, res, next) => {
   console.log(req.body.username);
   const createCustomer = await Customer.create({
-    username: req.body.username,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
     email: req.body.email,

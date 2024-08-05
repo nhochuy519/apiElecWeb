@@ -6,24 +6,19 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 
 const customerSchema = mongoose.Schema({
-  name: {
-    type: String,
-  },
   username: {
     type: String,
-    unique: true,
-    lowercase: true,
-    match: [
-      /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-      "Username invalid, it should contain 8-20 alphanumeric letters and be unique!",
-    ], // kiểm tra tính hợp lệ của trường user name
+
+    // match: [
+    //   /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+    //   "Username invalid, it should contain 8-20 alphanumeric letters and be unique!",
+    // ], // kiểm tra tính hợp lệ của trường user name
   },
   email: {
     type: String,
     unique: true,
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email address"],
-    sparse: true,
   },
   password: {
     type: String,
