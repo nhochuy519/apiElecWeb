@@ -35,7 +35,7 @@ const signup = catchError(async (req, res, next) => {
     httpOnly: true, // chỉ được truy cập trong server ,  không được truy cập ở client
     secure: process.env.NODE_ENV === "development", // cookie chỉ được gửi qua HTTPS trong môi trường production
     sameSite: "None", // Nếu bạn đang gửi cookie từ một miền khác, hãy đặt sameSite thành "None"
-    maxAge: 5 * 24 * 60 * 60 * 1000, // thiết lập thời hạn trong 5 ngày
+    maxAge: 5 * 24 * 60 * 60 * 1000, // thiết lập thời hạn trong 5 ng
   });
   resSuccess(res, 201, token);
 });
@@ -44,16 +44,14 @@ const signup = catchError(async (req, res, next) => {
 const login = catchError(async (req, res, next) => {
   // resSuccess(res, 200, req.signedCookies.token);
   console.log("thực hiện login");
-  console.log(req.body);
-  const { username, password } = req.body;
-  if (!username || !password) {
+
+  const { email, password } = req.body;
+  if (!email || !password) {
     return next(new AppError("Please provide email and password!", 400));
   }
 
-  const customer = await Customer.findOne({ username: username }).select(
-    "+password",
-  );
-
+  const customer = await Customer.findOne({ email: email }).select("+password");
+  console.log("customer là", customer);
   const correctPassword = await customer.correctPassword(
     password,
     customer.password,
