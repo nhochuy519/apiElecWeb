@@ -18,8 +18,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const corsOptions = {
-  origin: "http://localhost:5173", // Thay thế bằng URL của client
-  credentials: true, // Cho phép gửi cookie và các thông tin xác thực khác
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));

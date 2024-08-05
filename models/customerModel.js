@@ -14,6 +14,10 @@ const customerSchema = mongoose.Schema({
     require: [true, "Please tell us your name"],
     unique: true,
     lowercase: true,
+    match: [
+      /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+      "Username invalid, it should contain 8-20 alphanumeric letters and be unique!",
+    ], // kiểm tra tính hợp lệ của trường user name
   },
   email: {
     type: String,
@@ -95,5 +99,17 @@ customerSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 };
 
 const Customer = mongoose.model("Customer", customerSchema);
+
+// The "models" object is provided by the Mongoose Library and stores all the registered models.
+// If a model named "User" already exists in the "models" object, it assigns that existing model to the "User" variable.
+// This prevents redefining the model and ensures that the existing model is reused.
+// If a model named "User" does not exist in the "models" object, the "model" function from Mongoose is called to create a new model
+// The newly created model is then assigned to the "User" variable.
+
+// Đối tượng "models" được cung cấp bởi Thư viện Mongoose và lưu trữ tất cả các model đã đăng ký.
+// Nếu một mô hình có tên "Người dùng" đã tồn tại trong đối tượng "mô hình", nó sẽ gán mô hình hiện có đó cho biến "Người dùng".
+// Điều này ngăn việc xác định lại mô hình và đảm bảo rằng mô hình hiện có được sử dụng lại.
+// Nếu model có tên "User" không tồn tại trong đối tượng "models", hàm "model" từ Mongoose sẽ được gọi để tạo model mới
+// Model mới tạo sau đó được gán cho biến "User".
 
 module.exports = Customer;
