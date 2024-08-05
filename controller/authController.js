@@ -28,11 +28,14 @@ const signup = catchError(async (req, res, next) => {
 
   const token = signToken(createCustomer._id);
 
+  // yêu cầu cross
+
   res.cookie("token", token, {
-    signed: true,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "development", // Đảm bảo thiết lập secure chỉ khi trong môi trường production
+    signed: true, // mã hoá bằng key
+    httpOnly: true, // chỉ được truy cập trong server ,  không được truy cập ở client
+    secure: process.env.NODE_ENV === "development", // cookie chỉ được gửi qua HTTPS trong môi trường production
     sameSite: "None", // Nếu bạn đang gửi cookie từ một miền khác, hãy đặt sameSite thành "None"
+    maxAge: 5 * 24 * 60 * 60 * 1000, // thiết lập thời hạn trong 5 ngày
   });
   resSuccess(res, 201, token);
 });
