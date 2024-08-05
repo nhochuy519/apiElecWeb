@@ -11,7 +11,6 @@ const customerSchema = mongoose.Schema({
   },
   username: {
     type: String,
-    require: [true, "Please tell us your name"],
     unique: true,
     lowercase: true,
     match: [
@@ -23,10 +22,12 @@ const customerSchema = mongoose.Schema({
     type: String,
     unique: true,
     lowercase: true,
+    validate: [validator.isEmail, "Please provide a valid email address"],
+    sparse: true,
   },
   password: {
     type: String,
-    require: [true, "Please provide a password"],
+    required: [true, "Please provide a password"],
     minlength: 8,
   },
   passwordConfirm: {

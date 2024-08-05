@@ -19,7 +19,14 @@ const resSuccess = (res, statusCode, token) => {
 };
 // đăng ký
 const signup = catchError(async (req, res, next) => {
-  const createCustomer = await Customer.create(req.body);
+  console.log(req.body.username);
+  const createCustomer = await Customer.create({
+    username: req.body.username,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+    email: req.body.email,
+  });
+
   const token = signToken(createCustomer._id);
 
   res.cookie("token", token, {
