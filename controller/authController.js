@@ -11,7 +11,7 @@ const signToken = (id) =>
     expiresIn: process.env.JWT_EXPRIES_IN,
   });
 
-const resSuccess = (res, obj = {}) => {
+const resSuccess = (res, statusCode, obj = {}) => {
   obj.status = "success";
   const { data, token } = obj;
   if (data) {
@@ -20,7 +20,7 @@ const resSuccess = (res, obj = {}) => {
   if (token) {
     obj.token = token;
   }
-  res.status(obj.statusCode).json(obj);
+  res.status(statusCode).json(obj);
 };
 // đăng ký
 const signup = catchError(async (req, res, next) => {
@@ -42,7 +42,7 @@ const signup = catchError(async (req, res, next) => {
     sameSite: "None", // Nếu bạn đang gửi cookie từ một miền khác, hãy đặt sameSite thành "None"
     maxAge: 5 * 24 * 60 * 60 * 1000, // thiết lập thời hạn trong 5 ng
   });
-  resSuccess(res, { statusCode: 201, token });
+  resSuccess(res, 201, { token });
 });
 
 // đăng nhập
@@ -77,8 +77,7 @@ const login = catchError(async (req, res, next) => {
     sameSite: "None", // Nếu bạn đang gửi cookie từ một miền khác, hãy đặt sameSite thành "None"
     maxAge: 5 * 24 * 60 * 60 * 1000, // thiết lập thời hạn trong 5 ng
   });
-
-  resSuccess(res, { statusCode: 200, token });
+  resSuccess(res, 200, { token });
 });
 
 const protect = catchError(async (req, res, next) => {
