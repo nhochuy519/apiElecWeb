@@ -57,13 +57,16 @@ const login = catchError(async (req, res, next) => {
   }
 
   const customer = await Customer.findOne({ email: email }).select("+password");
+  if (!customer) {
+    return next(new AppError("Incorrect email or password", 401));
+  }
 
-  const correctPassword = await customer.correctPassword(
+  const checkPassword = await customer.correctPassword(
     password,
     customer.password,
   );
 
-  if (!customer || !correctPassword) {
+  if (!customer || !checkPassword) {
     return next(new AppError("Incorrect email or password", 401));
   }
   const token = signToken(customer._id);
