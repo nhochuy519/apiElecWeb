@@ -11,11 +11,17 @@ const signToken = (id) =>
     expiresIn: process.env.JWT_EXPRIES_IN,
   });
 
-const resSuccess = (res, statusCode, token) => {
-  res.status(statusCode).json({
+const resSuccess = (res, statusCode, token, data) => {
+  const obj = {
     status: "success",
-    token,
-  });
+  };
+  if (data) {
+    obj.data = data;
+  }
+  if (token) {
+    obj.token = token;
+  }
+  res.status(statusCode).json(obj);
 };
 // đăng ký
 const signup = catchError(async (req, res, next) => {
@@ -51,7 +57,7 @@ const login = catchError(async (req, res, next) => {
   }
 
   const customer = await Customer.findOne({ email: email }).select("+password");
-  console.log("customer là", customer);
+
   const correctPassword = await customer.correctPassword(
     password,
     customer.password,
@@ -102,5 +108,4 @@ const protect = catchError(async (req, res, next) => {
   next();
 });
 
-const getProfile = catchError(async (req, res, next) => {});
-module.exports = { signup, login };
+module.exports = { signup, login, protect, resSuccess };

@@ -2,9 +2,13 @@ const express = require("express");
 
 const router = express.Router();
 
-const handleCustomer = require("../controller/authController");
+const handleAuth = require("../controller/authController");
 
-router.post("/signup", handleCustomer.signup);
+const handleCustomer = require("../controller/userController");
 
-router.post("/login", handleCustomer.login);
+router.post("/signup", handleAuth.signup);
+
+router.post("/login", handleAuth.login);
+
+router.get("/getUserProfile", handleAuth.protect, handleCustomer.getProfile);
 module.exports = router;
