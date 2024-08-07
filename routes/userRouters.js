@@ -12,5 +12,5 @@ router.post("/login", handleAuth.login);
 
 router.get("/getUserProfile", handleAuth.protect, handleCustomer.getProfile);
 
-router.delete("/logOut", handleAuth.logOut);
+router.post("/logOut", handleAuth.logOut);
 module.exports = router;
