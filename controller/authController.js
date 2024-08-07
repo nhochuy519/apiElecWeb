@@ -104,7 +104,7 @@ const protect = catchError(async (req, res, next) => {
 });
 
 const logOut = catchError(async (req, res, next) => {
-  res.cookie("token", "", { expires: new Date(0), httpOnly: true, path: "/" });
+  res.clearCookie("token");
   resSuccess(res, 200, { message: "Logged out successfully" });
 });
 
