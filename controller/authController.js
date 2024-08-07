@@ -13,13 +13,7 @@ const signToken = (id) =>
 
 const resSuccess = (res, statusCode, obj = {}) => {
   obj.status = "success";
-  const { data, token } = obj;
-  if (data) {
-    obj.data = data;
-  }
-  if (token) {
-    obj.token = token;
-  }
+
   res.status(statusCode).json(obj);
 };
 // đăng ký
@@ -109,4 +103,9 @@ const protect = catchError(async (req, res, next) => {
   next();
 });
 
-module.exports = { signup, login, protect, resSuccess };
+const logOut = catchError(async (req, res, next) => {
+  res.cookie("token", "", { expires: new Date(0), httpOnly: true, path: "/" });
+  resSuccess(res, 200, { message: "Logged out successfully" });
+});
+
+module.exports = { signup, login, protect, resSuccess, logOut };
