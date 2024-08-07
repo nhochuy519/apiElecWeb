@@ -104,7 +104,7 @@ const protect = catchError(async (req, res, next) => {
 });
 
 const logOut = catchError(async (req, res, next) => {
-  res.clearCookie("token");
+  res.clearCookie("token", { path: "/", sameSite: "None", secure: true });
   resSuccess(res, 200, { message: "Logged out successfully" });
 });
 
