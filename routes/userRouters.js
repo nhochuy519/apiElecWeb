@@ -13,4 +13,6 @@ router.post("/login", handleAuth.login);
 router.get("/getUserProfile", handleAuth.protect, handleCustomer.getProfile);
 
 router.post("/logOut", handleAuth.logOut);
+
+router.post("/updateProfile", handleAuth.protect, handleCustomer.updateProfile);
 module.exports = router;

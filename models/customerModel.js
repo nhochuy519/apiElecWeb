@@ -49,14 +49,12 @@ const customerSchema = mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ["male", "female"],
+    enum: ["male", "female", "other"],
   },
   dateOfBirth: {
     type: Date,
   },
-  address: {
-    type: String,
-  },
+
   numberPhone: {
     type: Number,
   },
