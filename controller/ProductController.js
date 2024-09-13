@@ -3,6 +3,12 @@ const Product = require("../models/productModel");
 
 const APIFeatures = require("../utils/apiFeatures");
 
+const catchError = require("../utils/catchError");
+
+const { resSuccess } = require("./authController");
+
+const mongoose = require("mongoose");
+
 const getProducts = async (req, res, next) => {
   try {
     const features = new APIFeatures(Product.find(), req.query);
@@ -25,19 +31,33 @@ const getProducts = async (req, res, next) => {
 
 const getProduct = async (req, res, next) => {
   try {
-    console.log(req.params);
-    const product = await Product.findById(req.params.id);
+    console.log("Request ID:", req.params.id);
+
+    const newId = new mongoose.Types.ObjectId(req.params.id);
+
+    const product = await Product.aggregate([
+      {
+        $match: { _id: newId },
+      },
+      {
+        $lookup: {
+          from: "variantproducts", // Tên collection chứa variant products
+          localField: "_id", // Trường trong Product
+          foreignField: "productId", // Trường trong VariantProduct liên kết với Product
+          as: "variantProducts", // Tên của mảng chứa kết quả liên kết
+        },
+      },
+    ]);
 
     res.status(200).json({
       status: "success",
-      data: {
-        product,
-      },
+      data: { product },
     });
   } catch (error) {
-    res.status(404).json({
+    console.error("Error:", error); // Ghi lại lỗi để dễ debug
+    res.status(500).json({
       status: "fail",
-      message: error,
+      message: error.message,
     });
   }
 };

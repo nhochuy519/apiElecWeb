@@ -1,34 +1,7 @@
 const mongoose = require("mongoose");
 
-const classifySchema = mongoose.Schema({
-  color: {
-    type: String,
-  },
-  kind: [
-    {
-      size: {
-        type: String,
-      },
-      quantity: {
-        type: Number,
-        default: 0,
-      },
-      configuration: String,
-      price: {
-        type: Number,
-      },
-      priceDiscount: {
-        type: Number,
-        validate: {
-          validator: function (value) {
-            return value < this.price;
-          },
-          message: "Discount price ({VALUE})should be below regular price",
-        },
-      },
-    },
-  ],
-});
+const classify = require("./variantProduct");
+const { type } = require("express/lib/response");
 
 const productSchema = mongoose.Schema({
   name: {
@@ -66,7 +39,12 @@ const productSchema = mongoose.Schema({
       message: "Discount price ({VALUE})should be below regular price",
     },
   },
-  classify: [classifySchema],
+  variantProducts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "VariantProduct",
+    },
+  ],
   star: {
     type: Number,
     default: 4.5,
