@@ -35,19 +35,23 @@ const getProduct = async (req, res, next) => {
 
     const newId = new mongoose.Types.ObjectId(req.params.id);
 
-    const product = await Product.aggregate([
-      {
-        $match: { _id: newId },
-      },
-      {
-        $lookup: {
-          from: "variantproducts", // Tên collection chứa variant products
-          localField: "_id", // Trường trong Product
-          foreignField: "productId", // Trường trong VariantProduct liên kết với Product
-          as: "variantProducts", // Tên của mảng chứa kết quả liên kết
-        },
-      },
-    ]);
+    // const product = await Product.aggregate([
+    //   {
+    //     $match: { _id: newId },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "variantproducts", // Tên collection chứa variant products
+    //       localField: "_id", // Trường trong Product
+    //       foreignField: "productId", // Trường trong VariantProduct liên kết với Product
+    //       as: "variantProducts", // Tên của mảng chứa kết quả liên kết
+    //     },
+    //   },
+    // ]);
+
+    const product = await Product.findById(req.params.id).populate(
+      "variantProducts",
+    );
 
     res.status(200).json({
       status: "success",

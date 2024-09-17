@@ -26,10 +26,7 @@ const productSchema = mongoose.Schema({
       message: "Image requirements must have at least 4 photos",
     },
   },
-  price: {
-    type: Number,
-    required: [true, "Product must have a price"],
-  },
+
   priceDiscount: {
     type: Number,
     validate: {
