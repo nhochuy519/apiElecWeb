@@ -16,11 +16,10 @@ router.get("/getUserProfile", handleAuth.protect, handleCustomer.getProfile);
 
 router.post("/logOut", handleAuth.logOut);
 
-router.post("/updateProfile", handleAuth.protect, handleCustomer.updateProfile);
+router.post("/updateProfile", handleAuth.protect, handleCustomer.updateProfile); // chỉnh sửa lại patch
 
-router.post(
-  "/addToCart",
-  handleAuth.protect,
-  handleCart.removeClassifyFromAllDocuments,
-);
+// thêm vào giỏ hàng
+router.post("/addToCart", handleAuth.protect, handleCart.addToCart);
+
+router.get("/userCart", handleAuth.protect, handleCart.getUserCart);
 module.exports = router;

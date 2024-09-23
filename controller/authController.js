@@ -108,4 +108,19 @@ const logOut = catchError(async (req, res, next) => {
   resSuccess(res, 200, { message: "Logged out successfully" });
 });
 
-module.exports = { signup, login, protect, resSuccess, logOut };
+const restrictTo =
+  (...roles) =>
+  (req, res, next) => {
+    // roles ['admin,'lead-guile'] chỉ có 2 thằng được truy cập và xoá sản phẩm
+    console.log(req.user);
+    console.log(roles);
+    console.log(roles.includes(req.user.role));
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You do not have permission to perform this action", 403),
+      );
+    }
+    next();
+  };
+
+module.exports = { signup, login, protect, resSuccess, logOut, restrictTo };
