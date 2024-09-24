@@ -35,27 +35,47 @@ const getProduct = async (req, res, next) => {
 
     const newId = new mongoose.Types.ObjectId(req.params.id);
 
-    // const product = await Product.aggregate([
-    //   {
-    //     $match: { _id: newId },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "variantproducts", // Tên collection chứa variant products
-    //       localField: "_id", // Trường trong Product
-    //       foreignField: "productId", // Trường trong VariantProduct liên kết với Product
-    //       as: "variantProducts", // Tên của mảng chứa kết quả liên kết
-    //     },
-    //   },
-    // ]);
+    const grouptVariant = await Product.aggregate([
+      {
+        $match: { _id: newId },
+      },
+      {
+        $lookup: {
+          from: "variantproducts", // Đảm bảo tên collection là đúng
+          localField: "_id", // Trường _id trong Product
+          foreignField: "productId", // Trường productId trong VariantProduct (cần là ObjectId)
+          as: "variantProducts",
+        },
+      },
+      {
+        // Tách variantProducts ra khỏi mảng để xử lý
+        $unwind: "$variantProducts",
+      },
+      {
+        // Nhóm các variantProducts dựa trên trường 'color'
+        $group: {
+          _id: "$variantProducts.color",
+          variants: {
+            $push: {
+              idVariant: "$variantProducts._id",
+              idProduct: "$variantProducts.productId",
+              configuration: "$variantProducts.configuration",
+              stock: "$variantProducts.stock",
+              price: "$variantProducts.price",
+              priceDiscount: "$variantProducts.priceDiscount",
+            },
+          },
+        },
+      },
+    ]);
 
-    const product = await Product.findById(req.params.id).populate(
-      "variantProducts",
-    );
-
+    const product = await Product.findById(req.params.id);
+    const newObjProduct = { ...product._doc };
+    newObjProduct.variantProducts = grouptVariant;
+    console.log("obj la", newObjProduct.variantProducts);
     res.status(200).json({
       status: "success",
-      data: { product },
+      data: { newObjProduct },
     });
   } catch (error) {
     console.error("Error:", error); // Ghi lại lỗi để dễ debug
