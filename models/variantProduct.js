@@ -12,7 +12,7 @@ const variantProductSchema = mongoose.Schema({
     type: String,
   },
   stock: {
-    type: String,
+    type: Number,
     validate: {
       validator: function (value) {
         return value >= 0;

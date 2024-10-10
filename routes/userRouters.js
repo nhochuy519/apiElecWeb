@@ -22,4 +22,7 @@ router.post("/updateProfile", handleAuth.protect, handleCustomer.updateProfile);
 router.post("/addToCart", handleAuth.protect, handleCart.addToCart);
 
 router.get("/userCart", handleAuth.protect, handleCart.getUserCart);
+
+router.patch("/updateCart", handleAuth.protect, handleCart.updateCart);
+
 module.exports = router;

@@ -51,7 +51,6 @@ const addToCart = catchError(async (req, res, next) => {
       findIdProduct.itemsProduct[productIndex].quantity += req.body.quantity;
       await findIdProduct.save();
     } else {
-      console.log("thực hiện else");
       findCart.itemsProduct.push(req.body);
       await findCart.save();
     }
@@ -75,4 +74,26 @@ const getUserCart = catchError(async (req, res, next) => {
   resSuccess(res, 200, { data: userCart });
 });
 
-module.exports = { removeClassifyFromAllDocuments, addToCart, getUserCart };
+const updateCart = catchError(async (req, res, next) => {
+  // id cart and id itemProduct
+  const cart = await Cart.findById(req.body.idCart);
+  const productIndex = cart.itemsProduct.findIndex((item) =>
+    item._id.equals(req.body.idItem),
+  );
+  if (req.body.quantity && req.body.quantity !== 0) {
+    console.log("thực hiện update quantity");
+
+    cart.itemsProduct[productIndex].quantity += req.body.quantity;
+    await cart.save();
+  }
+  resSuccess(res, 200, {
+    message: "Updated succesfully",
+  });
+});
+
+module.exports = {
+  removeClassifyFromAllDocuments,
+  addToCart,
+  getUserCart,
+  updateCart,
+};
