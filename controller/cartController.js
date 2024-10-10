@@ -83,7 +83,7 @@ const updateCart = catchError(async (req, res, next) => {
   if (req.body.quantity && req.body.quantity !== 0) {
     console.log("thực hiện update quantity");
 
-    cart.itemsProduct[productIndex].quantity += req.body.quantity;
+    cart.itemsProduct[productIndex].quantity = req.body.quantity;
     await cart.save();
   }
   resSuccess(res, 200, {
