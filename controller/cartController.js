@@ -85,6 +85,9 @@ const updateCart = catchError(async (req, res, next) => {
 
     cart.itemsProduct[productIndex].quantity = req.body.quantity;
     await cart.save();
+  } else if (req.body.quantity === 0) {
+    cart.itemsProduct.splice(productIndex, 1);
+    await cart.save();
   }
   resSuccess(res, 200, {
     message: "Updated succesfully",
