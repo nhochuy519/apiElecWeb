@@ -8,6 +8,8 @@ const handleCustomer = require("../controller/userController");
 
 const handleCart = require("../controller/cartController");
 
+const handleOrder = require("../controller/orderController");
+
 router.post("/signup", handleAuth.signup);
 
 router.post("/login", handleAuth.login);
@@ -24,5 +26,12 @@ router.post("/addToCart", handleAuth.protect, handleCart.addToCart);
 router.get("/userCart", handleAuth.protect, handleCart.getUserCart);
 
 router.patch("/updateCart", handleAuth.protect, handleCart.updateCart);
+
+// xử lý order
+
+router
+  .route("/userOrder")
+  .get(handleAuth.protect, handleOrder.getOrder)
+  .post(handleAuth.protect, handleOrder.createOrder);
 
 module.exports = router;
