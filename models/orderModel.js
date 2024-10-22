@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 const orderSchema = mongoose.Schema(
   {
@@ -44,6 +45,9 @@ const orderSchema = mongoose.Schema(
     },
     deliveredAt: {
       type: Date,
+    },
+    numberPhone: {
+      type: String,
     },
   },
   {

@@ -17,6 +17,7 @@ const createOrder = catchError(async (req, res, next) => {
       address: req.body.address,
     },
     paymentMethod: req.body.paymentMethod,
+    numberPhone: req.body.numberPhone,
   });
 
   // Lấy danh sách idVariantProduct từ itemsOrder
