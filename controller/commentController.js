@@ -11,7 +11,7 @@ const getComment = catchError(async (req, res, next) => {
     idProduct: req.query.idProduct,
   }).populate({
     path: "comments.idUser",
-    select: "username email",
+    select: "username email photo",
   });
   if (!productComment) {
     return next(new AppError("comments not found", 404));
