@@ -10,6 +10,8 @@ const handleCart = require("../controller/cartController");
 
 const handleOrder = require("../controller/orderController");
 
+const handleComment = require("../controller/commentController");
+
 router.post("/signup", handleAuth.signup);
 
 router.post("/login", handleAuth.login);
@@ -35,3 +37,11 @@ router
   .post(handleAuth.protect, handleOrder.createOrder);
 
 module.exports = router;
+
+// xử lý comments
+
+router
+  .route("/userComment")
+  .get(handleComment.getComment)
+  .post(handleAuth.protect, handleComment.createComment)
+  .patch(handleAuth.protect, handleComment.upDateComment);
