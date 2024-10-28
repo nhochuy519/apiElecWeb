@@ -28,7 +28,7 @@ const createComment = catchError(async (req, res, next) => {
       idProduct: req.body.idProduct,
       comments: [
         {
-          idUser: req.body.idUser,
+          idUser: req.user._id,
           text: req.body.text, // Chú ý rằng bạn cần truyền đúng giá trị text
           star: req.body.star,
         },
@@ -37,7 +37,7 @@ const createComment = catchError(async (req, res, next) => {
   } else {
     // Nếu đã có comment, thêm bình luận mới vào mảng comments
     findCmt.comments.push({
-      idUser: req.body.idUser,
+      idUser: req.user._id,
       text: req.body.text,
       star: req.body.star,
     });
