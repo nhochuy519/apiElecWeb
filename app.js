@@ -16,12 +16,30 @@ const globalHanleError = require("./controller/errorController");
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+  : [];
+
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin(origin, callback) {
+    // Allow requests like Postman/cURL (no browser origin)
+    if (!origin) return callback(null, true);
+
+    // If CORS_ORIGINS is empty, allow all origins
+    if (allowedOrigins.length === 0) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new AppError("Origin not allowed by CORS", 403));
+  },
   credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser("ronaldoIsTheGoat"));
